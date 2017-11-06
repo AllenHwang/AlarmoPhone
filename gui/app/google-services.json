@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "803301130862",
+    "project_id": "alarmophone"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803301130862:android:96b4a1ea3c2ed0dd",
+        "android_client_info": {
+          "package_name": "com.example.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803301130862-hsbh3hn7s815s0tm999b0jhb0a1lll82.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "803301130862-nvguan1tepio82fkn8mlcpkcvgejhkcr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.example",
+            "certificate_hash": "d0589a1fb8e102eab2e55438117229546e8ec313"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASSMx2qEaGh_S5oGB_s0DCdLHgwIggPL4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

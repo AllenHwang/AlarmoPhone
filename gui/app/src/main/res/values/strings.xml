@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Example</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="edit_email">Email</string>
+    <string name="edit_passowrd">Password</string>
+    <string name="button_signin">Sign In</string>
+    <string name="button_alarm">Alarms</string>
+    <string name="button_timer">Timer</string>
+    <string name="button_addalarm">Add Alarm</string>
+    <string name="button_create_alarm">Create Alarm</string>
+</resources>
