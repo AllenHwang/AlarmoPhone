@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.myapplication.TimerActivity"
+    android:screenOrientation="portrait">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        >
+
+    </android.support.design.widget.AppBarLayout>
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="Stop"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center_vertical|center_horizontal" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:text="Start"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center_vertical|left" />
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:text="Reset"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center_vertical|right" />
+
+    <EditText
+        android:id="@+id/minutes"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="78dp"
+        android:layout_gravity="top|center"
+        android:ems="10"
+        android:inputType="time"
+        android:text="00"
+        android:textAlignment="center"
+        android:textSize="70sp"
+        android:textStyle="bold"
+        android:maxLength="2"
+        android:cursorVisible="false"
+        android:background="@android:color/transparent"
+        android:selectAllOnFocus="true"
+        />
+
+    <EditText
+        android:id="@+id/seconds"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="78dp"
+        android:layout_gravity="top|right"
+        android:ems="10"
+        android:inputType="time"
+        android:textAlignment="center"
+        android:textSize="70sp"
+        android:textStyle="bold"
+        android:text="00"
+        android:maxLength="2"
+        android:cursorVisible="false"
+        android:background="@android:color/transparent"
+        android:selectAllOnFocus="true"
+        />
+
+    <EditText
+        android:id="@+id/hours"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="78dp"
+        android:layout_gravity="top|left"
+        android:ems="10"
+        android:text="00"
+        android:inputType="time"
+        android:textAlignment="center"
+        android:textSize="70sp"
+        android:textStyle="bold"
+        android:maxLength="2"
+        android:cursorVisible="false"
+        android:background="@android:color/transparent"
+        android:selectAllOnFocus="true"
+        />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_timer" />
+
+    <TextView
+        android:id="@+id/textHours"
+        android:layout_width="130dp"
+        android:layout_height="286dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="top|left"
+        android:background="@android:color/transparent"
+        android:text="Hours"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/textMinutes"
+        android:layout_width="130dp"
+        android:layout_height="286dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="top|center"
+        android:background="@android:color/transparent"
+        android:text="Minutes"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/textSeconds"
+        android:layout_width="130dp"
+        android:layout_height="286dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="top|right"
+        android:background="@android:color/transparent"
+        android:text="Seconds"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        />
+
+
+</android.support.design.widget.CoordinatorLayout>
