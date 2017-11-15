@@ -3,37 +3,55 @@ package com.example.alarmophone;
 /**
  * Created by Phoenix Horizon on 10/31/2017.
  */
-import android.app.Activity;
-import android.content.ComponentName;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.support.v4.content.WakefulBroadcastReceiver;
+import android.os.Bundle;
+import android.os.PowerManager;
+import android.widget.Toast;
 
-public class AlarmReceiver extends WakefulBroadcastReceiver {
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class AlarmReceiver extends BroadcastReceiver {
+
+
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        //this will update the UI with message
-        AlarmActivity inst = AlarmActivity.instance();
-        inst.setAlarmText("Alarm! Wake up! Wake up!");
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Wake up");
 
-        //this will sound the alarm tone
-        //this will sound the alarm once, if you wish to
-        //raise alarm in loop continuously then use MediaPlayer and setLooping(true)
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
-        ringtone.play();
+        wl.acquire();
 
-        //this will send a notification message
-        ComponentName comp = new ComponentName(context.getPackageName(),
-                AlarmService.class.getName());
-        startWakefulService(context, (intent.setComponent(comp)));
-        setResultCode(Activity.RESULT_OK);
+        Bundle extras = intent.getExtras();
+        StringBuilder msgStr = new StringBuilder();
+
+        Format formatter = new SimpleDateFormat("hh:mm:ss a");
+        msgStr.append(formatter.format(new Date()));
+        Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
+        AlarmActivity.ringtone.play();
     }
+
+    public void SetAlarm(Context context, Long time){
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+        am.set(AlarmManager.RTC_WAKEUP, time, pi);
+    }
+
+    public void CancelAlarm(Context context){
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
+        if(AlarmActivity.ringtone.isPlaying())
+            AlarmActivity.ringtone.stop();
+    }
+
+
 }
