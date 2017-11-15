@@ -16,8 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +27,9 @@ import java.util.TimerTask;
 public class TimerActivity extends AppCompatActivity {
     CountDownTimer cdt;
     int totalTimeLeft = 0;
+    boolean pomoState = false;
+    boolean pomoBreak = false;
+    boolean testSkip = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +46,15 @@ public class TimerActivity extends AppCompatActivity {
         stop.setEnabled(false);
         final Button reset = (Button) findViewById(R.id.reset);
         reset.setEnabled(false);
+        final ToggleButton pomodoro = (ToggleButton) findViewById(R.id.pomodoro);
+        //final Button skip = (Button) findViewById(R.id.skip);
+        //skip.setEnabled(false);
 
 
         hours.addTextChangedListener(new TextWatcher() {
             boolean ignore;
             boolean clear;
+            // us;
 
             public void afterTextChanged(Editable s) {
 
@@ -56,6 +65,7 @@ public class TimerActivity extends AppCompatActivity {
                     hours.setText("00");
                     ignore = false;
                     clear = false;
+                    hours.requestFocus();
                     return;
                 }
 
@@ -63,18 +73,18 @@ public class TimerActivity extends AppCompatActivity {
                 int length = s.length();
                 if(length > 0)
                      val = Integer.parseInt(s.toString());
-                if(length == 1){
+                /*if(length == 1){
                     String newNum = "0"+Integer.toString(val);
                     ignore = true;
                     hours.setText(newNum);
                     ignore = false;
-                }
+                }*/
                 if(length == 2 && val > 23) {
                     ignore = true;
                     hours.setText("23");
                     ignore = false;
                 }
-                if(val > 0 && totalTimeLeft < 1000)
+                if(val > 0 && totalTimeLeft < 1000 && !pomoState)
                     start.setEnabled(true);
 
                 if(length == 2)
@@ -86,10 +96,8 @@ public class TimerActivity extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                /*int length = s.length();
-                if(length == 2){
-                    swap = true;
-                }*/
+                if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
+                    clear = true;
             }
         });
         minutes.addTextChangedListener(new TextWatcher() {
@@ -105,6 +113,7 @@ public class TimerActivity extends AppCompatActivity {
                     minutes.setText("00");
                     ignore = false;
                     clear = false;
+                    minutes.requestFocus();
                     return;
                 }
 
@@ -112,21 +121,29 @@ public class TimerActivity extends AppCompatActivity {
                 int length = s.length();
                 if(length > 0)
                     val = Integer.parseInt(s.toString());
-                if(length == 1){
+                /*if(length == 1){
                     String newNum = "0"+Integer.toString(val);
                     ignore = true;
                     minutes.setText(newNum);
                     ignore = false;
-                }
+                }*/
                 if(length == 2 && val > 59) {
                     ignore = true;
                     minutes.setText("59");
                     ignore = false;
                 }
-                if(val > 0 && totalTimeLeft < 1000)
+                if(val > 0 && totalTimeLeft < 1000 && !pomoState)
                     start.setEnabled(true);
                 if(length == 2)
                     seconds.requestFocus();
+               /* if(length == 3 && val > 9) {
+                    String temp = s.toString();
+                    ignore = true;
+                    s.replace(1,2,"0",0,1);
+                    s.replace(0,1,temp.toString(), 1,2 );
+                    ignore = false;
+                    s.delete(2, 3);
+                }*/
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -134,8 +151,8 @@ public class TimerActivity extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.charAt(0) == '0')
-                    clear = true;
+                if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
+                   clear = true;
             }
         });
         seconds.addTextChangedListener(new TextWatcher() {
@@ -150,6 +167,7 @@ public class TimerActivity extends AppCompatActivity {
                     seconds.setText("00");
                     ignore = false;
                     clear = false;
+                    seconds.requestFocus();
                     return;
                 }
 
@@ -157,18 +175,18 @@ public class TimerActivity extends AppCompatActivity {
                 int length = s.length();
                 if(length > 0)
                     val = Integer.parseInt(s.toString());
-                if(length == 1){
+                /*if(length == 1){
                     String newNum = "0"+Integer.toString(val);
                     ignore = true;
                     seconds.setText(newNum);
                     ignore = false;
-                }
+                }*/
                 if(length == 2 && val > 59) {
                     ignore = true;
                     seconds.setText("59");
                     ignore = false;
                 }
-                if(val > 0 && totalTimeLeft < 1000)
+                if(val > 0 && totalTimeLeft < 1000 && !pomoState)
                     start.setEnabled(true);
             }
 
@@ -177,7 +195,8 @@ public class TimerActivity extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
+                    clear = true;
             }
         });
 
@@ -206,19 +225,91 @@ public class TimerActivity extends AppCompatActivity {
             public void onClick(View view) {
                 cdt.cancel();
                 totalTimeLeft = 0;
-                hours.setText("00");
-                minutes.setText("00");
-                seconds.setText("00");
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                reset.setEnabled(false);
+                if(!pomoState) {
+                    hours.setText("00");
+                    minutes.setText("00");
+                    seconds.setText("00");
+                    start.setEnabled(false);
+                    stop.setEnabled(false);
+                    reset.setEnabled(false);
+                }
+                else {
+                    pomoBreak = !pomoBreak;
+                    totalTimeLeft = 0;
+                    if(!pomoBreak) {
+                        hours.setText("00");
+                        minutes.setText("25");
+                        seconds.setText("00");
+                        reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
+                        /*hours.setText("00");
+                        minutes.setText("00");
+                        seconds.setText("10");
+                        reverseTimer(0,0,10,hours,minutes,seconds,stop,reset,start);*/
+                        cdt.cancel();
+                    }
+                    else {
+                        hours.setText("00");
+                        minutes.setText("05");
+                        seconds.setText("00");
+                        reverseTimer(0,5,0,hours,minutes,seconds,stop,reset,start);
+                        /*hours.setText("00");
+                        minutes.setText("00");
+                        seconds.setText("02");
+                        reverseTimer(0,0,2,hours,minutes,seconds,stop,reset,start);*/
+                        cdt.cancel();
+                    }
+                    start.setEnabled(true);
+                    stop.setEnabled(false);
+                }
             }
         });
+        pomodoro.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    pomoState = true;
+                    hours.setText("00");
+                    minutes.setText("25");
+                    seconds.setText("00");
+                    reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
+                    /*hours.setText("00");
+                    minutes.setText("00");
+                    seconds.setText("10");
+                    reverseTimer(0,0,10,hours,minutes,seconds,stop,reset,start);*/
+                    cdt.cancel();
+
+                    //reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
+                    start.setEnabled(true);
+                    stop.setEnabled(true);
+                    reset.setEnabled(true);
+                    //skip.setEnabled(true);
+                } else {
+                    // The toggle is disabled
+                    totalTimeLeft = 0;
+                    hours.setText("00");
+                    minutes.setText("00");
+                    seconds.setText("00");
+
+                    pomoState = false;
+                    start.setEnabled(false);
+                    stop.setEnabled(false);
+                    reset.setEnabled(false);
+                    //skip.setEnabled(false);
+                }
+            }
+        });
+       /* skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testSkip = true;
+            }
+        }); */
     }
 
-    public void reverseTimer(final int hours, final int minutes, final int seconds, final EditText th, final EditText tm, final EditText ts, final Button stop, final Button reset, final Button start) {
+    public int reverseTimer(final int hours, final int minutes, final int seconds, final EditText th, final EditText tm, final EditText ts, final Button stop, final Button reset, final Button start) {
         if(totalTimeLeft < 1000)
             totalTimeLeft = ((hours * 3600) + (minutes * 60) + seconds) * 1000 + 1000;
+
         cdt = new CountDownTimer(totalTimeLeft, 100) {
 
             public void onTick(long millisUntilFinished) {
@@ -237,13 +328,44 @@ public class TimerActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                stop.setEnabled(false);
-                reset.setEnabled(false);
+                if(!pomoState) {
+                    stop.setEnabled(false);
+                    reset.setEnabled(false);
+                }
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                 r.play();
+                if(pomoState) {
+                    pomoBreak = !pomoBreak;
+                    //start.setEnabled(false);
+
+                    if(!pomoBreak) {
+                        th.setText("00");
+                        tm.setText("25");
+                        ts.setText("00");
+                        reverseTimer(0,25,0,th,tm,ts,stop,reset,start);
+                        /*th.setText("00");
+                        tm.setText("00");
+                        ts.setText("10");
+                        reverseTimer(0,0,10,th,tm,ts,stop,reset,start);*/
+
+                    }
+                    else {
+                        th.setText("00");
+                        tm.setText("05");
+                        ts.setText("00");
+                        reverseTimer(0,5,0,th,tm,ts,stop,reset,start);
+                        /*th.setText("00");
+                        tm.setText("00");
+                        ts.setText("00");
+                        reverseTimer(0,0,2,th,tm,ts,stop,reset,start);*/
+
+                    }
+                }
             }
 
         }.start();
+
+        return 1;
     }
 }
