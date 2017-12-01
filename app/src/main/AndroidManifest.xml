@@ -40,8 +40,11 @@
 
         <activity
             android:name=".TimerActivity"
+            android:parentActivityName=".TimersActivity" />
+        <activity
+            android:name=".LoginActivity"
             android:parentActivityName=".MainMenuActivity" />
-        <activity android:name=".LoginActivity"
+        <activity android:name=".TimersActivity"
             android:parentActivityName=".MainMenuActivity"></activity>
     </application>
 

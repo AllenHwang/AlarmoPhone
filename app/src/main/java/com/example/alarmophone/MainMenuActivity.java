@@ -19,8 +19,8 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    public void timerActivity(View view){
-        Intent intent = new Intent(this, TimerActivity.class);
+    public void timersActivity(View view){
+        Intent intent = new Intent(this, TimersActivity.class);
         startActivity(intent);
     }
 }
