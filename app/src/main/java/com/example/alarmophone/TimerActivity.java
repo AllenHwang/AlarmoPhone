@@ -286,6 +286,9 @@ public class TimerActivity extends AppCompatActivity {
                     //skip.setEnabled(true);
                 } else {
                     // The toggle is disabled
+
+                    cdt.cancel();
+
                     totalTimeLeft = 0;
                     hours.setText("00");
                     minutes.setText("00");

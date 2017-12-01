@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1068800009501",
+    "firebase_url": "https://alarmophone-dbd38.firebaseio.com",
+    "project_id": "alarmophone-dbd38",
+    "storage_bucket": "alarmophone-dbd38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068800009501:android:c978c1aa95606f9d",
+        "android_client_info": {
+          "package_name": "com.example.alarmophone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068800009501-basipv6dkt8m508dijo734fm2jot8kdg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alarmophone",
+            "certificate_hash": "9d39189aef6f2b99a6f37ff3c429e93ccdbd4317"
+          }
+        },
+        {
+          "client_id": "1068800009501-uh05ff815qhdq9f37dgsfp8715l1unvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS5HEDg1_R4f1gS28U1BCoJWhp2eF0pZs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068800009501-uh05ff815qhdq9f37dgsfp8715l1unvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
