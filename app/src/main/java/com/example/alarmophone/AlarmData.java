@@ -12,7 +12,7 @@ public class AlarmData {
     public String amPm;
     public String name;
 
-    public AlarmData(String min, String hr, String amPm, String name){
+    public AlarmData(String hr, String min, String amPm, String name){
         minute = min;
         hour = hr;
         this.amPm = amPm;
