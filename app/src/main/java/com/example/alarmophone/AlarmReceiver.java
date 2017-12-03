@@ -48,7 +48,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Format formatter = new SimpleDateFormat("hh:mm:ss a");
         msgStr.append(formatter.format(new Date()));
         Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
-        AlarmActivity.ringtone.play();
+        AlarmCreator.ringtone.play();
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -87,8 +87,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
-        if(AlarmActivity.ringtone.isPlaying())
-            AlarmActivity.ringtone.stop();
+        if(AlarmCreator.ringtone.isPlaying())
+            AlarmCreator.ringtone.stop();
     }
 
 

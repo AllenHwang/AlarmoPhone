@@ -4,27 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.alarmophone.AlarmsActivity">
+    tools:context="com.example.alarmophone.AlarmOverview">
     tools:layout_editor_absoluteY="81dp">
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/buttonAddAlarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/button_addalarm"
         android:onClick="newAlarm"
-        app:layout_constraintBottom_toTopOf="@+id/listView"
+        android:text="@string/button_addalarm"
+        app:layout_constraintBottom_toTopOf="@+id/listViewAlarms"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/button_addalarm" />
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/listViewAlarms"
         android:layout_width="328dp"
         android:layout_height="415dp"
         android:layout_marginBottom="16dp"

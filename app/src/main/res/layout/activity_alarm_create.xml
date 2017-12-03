@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.alarmophone.MainActivity">
+
+
+    <Spinner
+        android:id="@+id/spinnerAMPM"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="9dp"
+        android:entries="@array/spinner_ampm"
+        app:layout_constraintStart_toEndOf="@+id/spinnerMinute"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+
+    <Spinner
+        android:id="@+id/spinnerHour"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
+        android:entries="@array/spinner_hours"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+
+    <Spinner
+        android:id="@+id/spinnerMinute"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
+        android:entries="@array/spinner_minutes"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+
+    <Button
+        android:id="@+id/buttonCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:text="ADD"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="10dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="9dp"
+        android:text=":"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toEndOf="@+id/spinnerHour"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+
+    <EditText
+        android:id="@+id/editTextAlarmName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="AlarmName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

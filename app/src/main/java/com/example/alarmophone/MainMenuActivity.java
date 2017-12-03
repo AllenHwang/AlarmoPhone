@@ -15,7 +15,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     /**Called when the user presses the Alarms button */
     public void alarmsActivity(View view){
-        Intent intent = new Intent(this, AlarmsActivity.class);
+        Intent intent = new Intent(this, AlarmOverview.class);
         startActivity(intent);
 
     }

@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/AlarmDataName"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/AlarmDataTime"
+        android:layout_alignBottom="@+id/AlarmDataTime"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_toEndOf="@+id/AlarmDataTime"
+        android:layout_toRightOf="@+id/AlarmDataTime"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/AlarmDataTime"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="31dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="19dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/AlarmDataDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/AlarmDataTime"
+        android:layout_alignStart="@+id/AlarmDataTime"
+        android:layout_below="@+id/AlarmDataTime"
+        android:layout_marginTop="33dp"
+        android:text="Delete" />
+
+    <Switch
+        android:id="@+id/AlarmDataToggle"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/AlarmDataName"
+        android:layout_alignStart="@+id/AlarmDataName"
+        android:layout_alignTop="@+id/AlarmDataDelete"
+        android:text="On/Off" />
+
+</RelativeLayout>
