@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.CircularArray;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,6 +34,7 @@ public class TimerActivity extends AppCompatActivity {
     boolean pomoState = false;
     boolean pomoBreak = false;
     boolean testSkip = false;
+    CircularArray<String> pomoTimes = new CircularArray<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class TimerActivity extends AppCompatActivity {
         //skip.setEnabled(false);
         final Button add = (Button) findViewById(R.id.add);
         add.setEnabled(false);
+        final Button chain = (Button) findViewById(R.id.chain);
+        chain.setVisibility(View.GONE);
 
         Bundle bundle = getIntent().getExtras();
         String importTimer = bundle.getString("timer");
@@ -220,10 +225,41 @@ public class TimerActivity extends AppCompatActivity {
             }
         });
 
+        chain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String h = hours.getText().toString();
+                if(h.length() == 1) {
+                    h = "0" + h;
+                }
+                String m = minutes.getText().toString();
+                if(m.length() == 1) {
+                    m = "0" + m;
+                }
+                String s = seconds.getText().toString();
+                if(s.length() == 1) {
+                    s = "0" + s;
+                }
+
+                String timer = h + ":" + m + ":" + s;
+                if(!h.equals("00") || !m.equals("00") || !s.equals("00")) {
+                    pomoTimes.addLast(timer);
+                }
+                hours.setText("00");
+                minutes.setText("00");
+                seconds.setText("00");
+            }
+        });
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timersActivity(view, hours, minutes, seconds);
+                if(!pomoState)
+                    timersActivity(view, hours, minutes, seconds);
+                else {
+                    timersActivity2(view, hours, minutes, seconds);
+                }
+
             }
         });
 
@@ -262,17 +298,17 @@ public class TimerActivity extends AppCompatActivity {
                     reset.setEnabled(false);
                 }
                 else {
-                    pomoBreak = !pomoBreak;
+                   /* pomoBreak = !pomoBreak;
                     totalTimeLeft = 0;
                     if(!pomoBreak) {
                         hours.setText("00");
                         minutes.setText("25");
                         seconds.setText("00");
                         reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
-                        /*hours.setText("00");
-                        minutes.setText("00");
-                        seconds.setText("10");
-                        reverseTimer(0,0,10,hours,minutes,seconds,stop,reset,start);*/
+                        //hours.setText("00");
+                        //minutes.setText("00");
+                       // seconds.setText("10");
+                       // reverseTimer(0,0,10,hours,minutes,seconds,stop,reset,start);
                         cdt.cancel();
                     }
                     else {
@@ -280,12 +316,32 @@ public class TimerActivity extends AppCompatActivity {
                         minutes.setText("05");
                         seconds.setText("00");
                         reverseTimer(0,5,0,hours,minutes,seconds,stop,reset,start);
-                        /*hours.setText("00");
-                        minutes.setText("00");
-                        seconds.setText("02");
-                        reverseTimer(0,0,2,hours,minutes,seconds,stop,reset,start);*/
+                        //hours.setText("00");
+                       // minutes.setText("00");
+                       // seconds.setText("02");
+                      //  reverseTimer(0,0,2,hours,minutes,seconds,stop,reset,start);
                         cdt.cancel();
+                    }*/
+                    totalTimeLeft = 0;
+                    if(!pomoTimes.isEmpty()) {
+                        String time = pomoTimes.popFirst();
+                        pomoTimes.addLast(time);
+
+                        int h = Integer.parseInt(time.substring(0,2));
+                        //int h = Integer.parseInt(time);
+                        int m = Integer.parseInt(time.substring(3, 5));
+                        int s = Integer.parseInt(time.substring(6));
+                        hours.setText(String.format("%02d", h));
+                        minutes.setText(String.format("%02d", m));
+                        seconds.setText(String.format("%02d", s));
                     }
+                    else {
+                        hours.setText("00");
+                        minutes.setText("00");
+                        seconds.setText("00");
+                    }
+
+                    cdt.cancel();
                     start.setEnabled(true);
                     stop.setEnabled(false);
                 }
@@ -296,8 +352,10 @@ public class TimerActivity extends AppCompatActivity {
                 if (isChecked) {
                     // The toggle is enabled
                     pomoState = true;
+                    add.setText("Add Chain");
+                    chain.setVisibility(View.VISIBLE);
                     hours.setText("00");
-                    minutes.setText("25");
+                    minutes.setText("00");
                     seconds.setText("00");
                     reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
                     /*hours.setText("00");
@@ -322,6 +380,7 @@ public class TimerActivity extends AppCompatActivity {
                     seconds.setText("00");
 
                     pomoState = false;
+                    add.setText("Add Timer");
                     start.setEnabled(false);
                     stop.setEnabled(false);
                     reset.setEnabled(false);
@@ -339,7 +398,7 @@ public class TimerActivity extends AppCompatActivity {
 
     public int reverseTimer(final int hours, final int minutes, final int seconds, final EditText th, final EditText tm, final EditText ts, final Button stop, final Button reset, final Button start) {
         if(totalTimeLeft < 1000)
-            totalTimeLeft = ((hours * 3600) + (minutes * 60) + seconds) * 1000 + 1000;
+            totalTimeLeft = ((hours * 3600) + (minutes * 60) + seconds) * 1000 + 777;
 
         cdt = new CountDownTimer(totalTimeLeft, 100) {
 
@@ -364,10 +423,19 @@ public class TimerActivity extends AppCompatActivity {
                     reset.setEnabled(false);
                 }
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                final Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                 r.play();
+               /* new CountDownTimer(4000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    public void onFinish() {
+                        r.stop();
+                    }
+                }.start();*/
                 if(pomoState) {
-                    pomoBreak = !pomoBreak;
+                    /*pomoBreak = !pomoBreak;
                     //start.setEnabled(false);
 
                     if(!pomoBreak) {
@@ -375,10 +443,10 @@ public class TimerActivity extends AppCompatActivity {
                         tm.setText("25");
                         ts.setText("00");
                         reverseTimer(0,25,0,th,tm,ts,stop,reset,start);
-                        /*th.setText("00");
-                        tm.setText("00");
-                        ts.setText("10");
-                        reverseTimer(0,0,10,th,tm,ts,stop,reset,start);*/
+                        //th.setText("00");
+                        //tm.setText("00");
+                        //ts.setText("10");
+                        //reverseTimer(0,0,10,th,tm,ts,stop,reset,start);
 
                     }
                     else {
@@ -386,11 +454,30 @@ public class TimerActivity extends AppCompatActivity {
                         tm.setText("05");
                         ts.setText("00");
                         reverseTimer(0,5,0,th,tm,ts,stop,reset,start);
-                        /*th.setText("00");
+                        //th.setText("00");
+                       // tm.setText("00");
+                      //  ts.setText("00");
+                      //  reverseTimer(0,0,2,th,tm,ts,stop,reset,start);
+
+                    }*/
+                    if(!pomoTimes.isEmpty()) {
+                        String time = pomoTimes.popFirst();
+                        pomoTimes.addLast(time);
+
+                        int h = Integer.parseInt(time.substring(0,2));
+                        //int h = Integer.parseInt(time);
+                        int m = Integer.parseInt(time.substring(3, 5));
+                        int s = Integer.parseInt(time.substring(6));
+                        th.setText(String.format("%02d", h));
+                        tm.setText(String.format("%02d", m));
+                        ts.setText(String.format("%02d", s));
+                        reverseTimer(h,m,s,th,tm,ts,stop,reset,start);
+                    }
+                    else {
+                        th.setText("00");
                         tm.setText("00");
                         ts.setText("00");
-                        reverseTimer(0,0,2,th,tm,ts,stop,reset,start);*/
-
+                        reverseTimer(0,0,0,th,tm,ts,stop,reset,start);
                     }
                 }
             }
@@ -407,9 +494,25 @@ public class TimerActivity extends AppCompatActivity {
         int size = cBundle.getInt("size");
         size++;
         bundle.putInt("size", size);
-        String timer = th.getText().toString() + ":" + tm.getText().toString()+ ":" + ts.getText().toString();
+        String hours = th.getText().toString();
+        if(hours.length() == 1) {
+            hours = "0" + hours;
+        }
+        String minutes = tm.getText().toString();
+        if(minutes.length() == 1) {
+            minutes = "0" + minutes;
+        }
+        String seconds =  ts.getText().toString();
+        if(seconds.length() == 1) {
+            seconds = "0" + seconds;
+        }
+        String timer = hours + ":" + minutes + ":" + seconds;
         bundle.putString("timer", timer);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    public void timersActivity2(View view, final EditText th, final EditText tm, final EditText ts){
+
     }
 }
