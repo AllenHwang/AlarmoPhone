@@ -30,8 +30,7 @@ import static com.example.alarmophone.NotificationPublisher.NOTIFICATION_ID;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-
-
+    private String CHANNEL_ID = "Alarm_Channel";
 
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -39,45 +38,28 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Wake up");
-
         wl.acquire();
 
-        Bundle extras = intent.getExtras();
         StringBuilder msgStr = new StringBuilder();
-
         Format formatter = new SimpleDateFormat("hh:mm:ss a");
         msgStr.append(formatter.format(new Date()));
         Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
-        AlarmCreator.ringtone.play();
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-
         int importance = NotificationManager.IMPORTANCE_HIGH;
         NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, "Notification", importance);
         mChannel.setLightColor(Color.RED);
         mChannel.enableVibration(true);
         mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
         notificationManager.createNotificationChannel(mChannel);
-
         Notification notification = intent.getParcelableExtra(NOTIFICATION);
         int id = intent.getIntExtra(NOTIFICATION_ID, 0);
         notificationManager.notify(id, notification);
 
+        int alarmId = intent.getIntExtra("ALARM_ID", 0);
+        AlarmOverview.ringtoneMap.get(alarmId).play();
     }
 
-    public void SetAlarm(Context context, Long time){
-
-    }
-
-    public void CancelAlarm(Context context){
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(sender);
-        if(AlarmCreator.ringtone.isPlaying())
-            AlarmCreator.ringtone.stop();
-    }
 
 
 }

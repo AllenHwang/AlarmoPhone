@@ -18,8 +18,10 @@ import java.util.ArrayList;
 
 public class AlarmArrayAdapter extends ArrayAdapter<AlarmData> {
 
-    AlarmArrayAdapter(Context context, ArrayList<AlarmData> alarms){
+    private AlarmOverview alarmOverview;
+    AlarmArrayAdapter(Context context, ArrayList<AlarmData> alarms, AlarmOverview alarmOverview){
         super(context, 0, alarms);
+        this.alarmOverview = alarmOverview;
     }
 
     @Override
@@ -43,6 +45,7 @@ public class AlarmArrayAdapter extends ArrayAdapter<AlarmData> {
             @Override
             public void onClick(View v) {
                 remove(alarmData);
+                //Maybe have to call clearAlarm because would deleting a ringing alarm cancel it???
             }
         });
 
@@ -51,7 +54,10 @@ public class AlarmArrayAdapter extends ArrayAdapter<AlarmData> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-
+                    alarmOverview.createAlarm(alarmData);
+                }
+                else{
+                    alarmOverview.clearAlarm(alarmData);
                 }
             }
         });
