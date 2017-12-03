@@ -1,6 +1,7 @@
 package com.example.alarmophone;
 
 
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -50,7 +51,22 @@ public class TimerActivity extends AppCompatActivity {
         final ToggleButton pomodoro = (ToggleButton) findViewById(R.id.pomodoro);
         //final Button skip = (Button) findViewById(R.id.skip);
         //skip.setEnabled(false);
+        final Button add = (Button) findViewById(R.id.add);
+        add.setEnabled(false);
 
+        Bundle bundle = getIntent().getExtras();
+        String importTimer = bundle.getString("timer");
+        if(importTimer != null) {
+            //format 12:34:56
+            int h = Integer.parseInt(importTimer.substring(0,2));
+            int m = Integer.parseInt(importTimer.substring(3,5));
+            int s = Integer.parseInt(importTimer.substring(6));
+            hours.setText(String.format("%02d", h));
+            minutes.setText(String.format("%02d", m));
+            seconds.setText(String.format("%02d", s));
+            start.setEnabled(true);
+            add.setEnabled(false);
+        }
 
         hours.addTextChangedListener(new TextWatcher() {
             boolean ignore;
@@ -99,6 +115,7 @@ public class TimerActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
                     clear = true;
+                add.setEnabled(true);
             }
         });
         minutes.addTextChangedListener(new TextWatcher() {
@@ -154,6 +171,7 @@ public class TimerActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
                     clear = true;
+                add.setEnabled(true);
             }
         });
         seconds.addTextChangedListener(new TextWatcher() {
@@ -198,6 +216,14 @@ public class TimerActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
                     clear = true;
+                add.setEnabled(true);
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timersActivity(view, hours, minutes, seconds);
             }
         });
 
@@ -211,6 +237,7 @@ public class TimerActivity extends AppCompatActivity {
                 start.setEnabled(false);
                 stop.setEnabled(true);
                 reset.setEnabled(true);
+                add.setEnabled(true);
             }
         });
         stop.setOnClickListener(new View.OnClickListener() {
@@ -371,5 +398,18 @@ public class TimerActivity extends AppCompatActivity {
         }.start();
 
         return 1;
+    }
+
+    public void timersActivity(View view, final EditText th, final EditText tm, final EditText ts){
+        Intent intent = new Intent(this, TimersActivity.class);
+        Bundle bundle = new Bundle();
+        Bundle cBundle = getIntent().getExtras();
+        int size = cBundle.getInt("size");
+        size++;
+        bundle.putInt("size", size);
+        String timer = th.getText().toString() + ":" + tm.getText().toString()+ ":" + ts.getText().toString();
+        bundle.putString("timer", timer);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
