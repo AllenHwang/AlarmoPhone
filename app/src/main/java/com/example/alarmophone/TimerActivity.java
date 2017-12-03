@@ -57,12 +57,58 @@ public class TimerActivity extends AppCompatActivity {
         final Button add = (Button) findViewById(R.id.add);
         add.setEnabled(false);
         final Button chain = (Button) findViewById(R.id.chain);
+        chain.setEnabled(false);
         chain.setVisibility(View.GONE);
 
         Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            boolean p = bundle.getBoolean("pomodoro");
+            pomodoro.setChecked(p);
+            if (pomodoro.isChecked()) {
+                // The toggle is enabled
+                pomoState = true;
+                add.setText("Add Chain");
+                chain.setVisibility(View.VISIBLE);
+                hours.setText("00");
+                minutes.setText("00");
+                seconds.setText("00");
+                //reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
+                    /*hours.setText("00");
+                    minutes.setText("00");
+                    seconds.setText("10");
+                    reverseTimer(0,0,10,hours,minutes,seconds,stop,reset,start);*/
+                if(cdt != null)
+                    cdt.cancel();
+
+                //reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
+                start.setEnabled(true);
+                stop.setEnabled(true);
+                reset.setEnabled(true);
+                //skip.setEnabled(true);
+            } else {
+                // The toggle is disabled
+                if(cdt != null)
+                    cdt.cancel();
+
+                totalTimeLeft = 0;
+                hours.setText("00");
+                minutes.setText("00");
+                seconds.setText("00");
+
+                pomoState = false;
+                add.setText("Add Timer");
+                chain.setVisibility(View.GONE);
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                reset.setEnabled(false);
+                //skip.setEnabled(false);
+            }
+        }
         String importTimer = bundle.getString("timer");
         if(importTimer != null) {
             //format 12:34:56
+            importTimer = importTimer.trim();
+
             int h = Integer.parseInt(importTimer.substring(0,2));
             int m = Integer.parseInt(importTimer.substring(3,5));
             int s = Integer.parseInt(importTimer.substring(6));
@@ -72,6 +118,31 @@ public class TimerActivity extends AppCompatActivity {
             start.setEnabled(true);
             add.setEnabled(false);
         }
+
+        String iChain = bundle.getString("chain");
+       // String[] importChain = iChain.split("\n");
+        if(iChain != null){
+            String[] importChain = iChain.split("\n");
+            for(int i = 0; i < importChain.length; i++) {
+                pomoTimes.addLast(importChain[i]);
+            }
+
+            String firstChain = pomoTimes.popFirst();
+            pomoTimes.addLast(firstChain);
+            firstChain = firstChain.trim();
+
+            int h = Integer.parseInt(firstChain.substring(0,2));
+            int m = Integer.parseInt(firstChain.substring(3,5));
+            int s = Integer.parseInt(firstChain.substring(6));
+            hours.setText(String.format("%02d", h));
+            minutes.setText(String.format("%02d", m));
+            seconds.setText(String.format("%02d", s));
+
+
+            start.setEnabled(true);
+            add.setEnabled(false);
+        }
+
 
         hours.addTextChangedListener(new TextWatcher() {
             boolean ignore;
@@ -120,7 +191,10 @@ public class TimerActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
                     clear = true;
-                add.setEnabled(true);
+                if(totalTimeLeft < 1000) {
+                    add.setEnabled(true);
+                    chain.setEnabled(true);
+                }
             }
         });
         minutes.addTextChangedListener(new TextWatcher() {
@@ -176,7 +250,10 @@ public class TimerActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
                     clear = true;
-                add.setEnabled(true);
+                if(totalTimeLeft < 1000) {
+                    add.setEnabled(true);
+                    chain.setEnabled(true);
+                }
             }
         });
         seconds.addTextChangedListener(new TextWatcher() {
@@ -221,7 +298,10 @@ public class TimerActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.charAt(0) == '0' && s.length() == 1 && !ignore)
                     clear = true;
-                add.setEnabled(true);
+                if(totalTimeLeft < 1000) {
+                    add.setEnabled(true);
+                    chain.setEnabled(true);
+                }
             }
         });
 
@@ -255,9 +335,26 @@ public class TimerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!pomoState)
-                    timersActivity(view, hours, minutes, seconds);
+                    timersActivity(view, hours, minutes, seconds, pomodoro);
                 else {
-                    timersActivity2(view, hours, minutes, seconds);
+                    String h = hours.getText().toString();
+                    if(h.length() == 1) {
+                        h = "0" + h;
+                    }
+                    String m = minutes.getText().toString();
+                    if(m.length() == 1) {
+                        m = "0" + m;
+                    }
+                    String s = seconds.getText().toString();
+                    if(s.length() == 1) {
+                        s = "0" + s;
+                    }
+
+                    String timer = h + ":" + m + ":" + s;
+                    if(!h.equals("00") || !m.equals("00") || !s.equals("00")) {
+                        pomoTimes.addLast(timer);
+                    }
+                    timersActivity2(view, hours, minutes, seconds, pomodoro);
                 }
 
             }
@@ -269,11 +366,12 @@ public class TimerActivity extends AppCompatActivity {
                 int h = Integer.parseInt(hours.getText().toString());
                 int m = Integer.parseInt(minutes.getText().toString());
                 int s = Integer.parseInt(seconds.getText().toString());
-                reverseTimer(h,m,s,hours,minutes,seconds,stop,reset,start);
+                reverseTimer(h,m,s,hours,minutes,seconds,stop,reset,start,add,chain);
                 start.setEnabled(false);
                 stop.setEnabled(true);
                 reset.setEnabled(true);
-                add.setEnabled(true);
+                add.setEnabled(false);
+                chain.setEnabled(false);
             }
         });
         stop.setOnClickListener(new View.OnClickListener() {
@@ -282,12 +380,15 @@ public class TimerActivity extends AppCompatActivity {
                 cdt.cancel();
                 start.setEnabled(true);
                 stop.setEnabled(false);
+                add.setEnabled(true);
+                chain.setEnabled(true);
             }
         });
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cdt.cancel();
+                if(cdt != null)
+                    cdt.cancel();
                 totalTimeLeft = 0;
                 if(!pomoState) {
                     hours.setText("00");
@@ -296,6 +397,8 @@ public class TimerActivity extends AppCompatActivity {
                     start.setEnabled(false);
                     stop.setEnabled(false);
                     reset.setEnabled(false);
+                    add.setEnabled(false);
+                    chain.setEnabled(false);
                 }
                 else {
                    /* pomoBreak = !pomoBreak;
@@ -341,7 +444,8 @@ public class TimerActivity extends AppCompatActivity {
                         seconds.setText("00");
                     }
 
-                    cdt.cancel();
+                    if(cdt != null)
+                        cdt.cancel();
                     start.setEnabled(true);
                     stop.setEnabled(false);
                 }
@@ -357,12 +461,13 @@ public class TimerActivity extends AppCompatActivity {
                     hours.setText("00");
                     minutes.setText("00");
                     seconds.setText("00");
-                    reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
+                    //reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
                     /*hours.setText("00");
                     minutes.setText("00");
                     seconds.setText("10");
                     reverseTimer(0,0,10,hours,minutes,seconds,stop,reset,start);*/
-                    cdt.cancel();
+                    if(cdt != null)
+                        cdt.cancel();
 
                     //reverseTimer(0,25,0,hours,minutes,seconds,stop,reset,start);
                     start.setEnabled(true);
@@ -371,8 +476,8 @@ public class TimerActivity extends AppCompatActivity {
                     //skip.setEnabled(true);
                 } else {
                     // The toggle is disabled
-
-                    cdt.cancel();
+                    if(cdt != null)
+                        cdt.cancel();
 
                     totalTimeLeft = 0;
                     hours.setText("00");
@@ -381,6 +486,7 @@ public class TimerActivity extends AppCompatActivity {
 
                     pomoState = false;
                     add.setText("Add Timer");
+                    chain.setVisibility(View.GONE);
                     start.setEnabled(false);
                     stop.setEnabled(false);
                     reset.setEnabled(false);
@@ -396,7 +502,7 @@ public class TimerActivity extends AppCompatActivity {
         }); */
     }
 
-    public int reverseTimer(final int hours, final int minutes, final int seconds, final EditText th, final EditText tm, final EditText ts, final Button stop, final Button reset, final Button start) {
+    public int reverseTimer(final int hours, final int minutes, final int seconds, final EditText th, final EditText tm, final EditText ts, final Button stop, final Button reset, final Button start, final Button add, final Button chain) {
         if(totalTimeLeft < 1000)
             totalTimeLeft = ((hours * 3600) + (minutes * 60) + seconds) * 1000 + 777;
 
@@ -419,8 +525,11 @@ public class TimerActivity extends AppCompatActivity {
 
             public void onFinish() {
                 if(!pomoState) {
+                    start.setEnabled(false);
                     stop.setEnabled(false);
                     reset.setEnabled(false);
+                    add.setEnabled(false);
+                    chain.setEnabled(false);
                 }
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 final Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
@@ -463,6 +572,7 @@ public class TimerActivity extends AppCompatActivity {
                     if(!pomoTimes.isEmpty()) {
                         String time = pomoTimes.popFirst();
                         pomoTimes.addLast(time);
+                        time = time.trim();
 
                         int h = Integer.parseInt(time.substring(0,2));
                         //int h = Integer.parseInt(time);
@@ -471,13 +581,13 @@ public class TimerActivity extends AppCompatActivity {
                         th.setText(String.format("%02d", h));
                         tm.setText(String.format("%02d", m));
                         ts.setText(String.format("%02d", s));
-                        reverseTimer(h,m,s,th,tm,ts,stop,reset,start);
+                        reverseTimer(h,m,s,th,tm,ts,stop,reset,start,add,chain);
                     }
                     else {
                         th.setText("00");
                         tm.setText("00");
                         ts.setText("00");
-                        reverseTimer(0,0,0,th,tm,ts,stop,reset,start);
+                        reverseTimer(0,0,0,th,tm,ts,stop,reset,start,add,chain);
                     }
                 }
             }
@@ -487,32 +597,50 @@ public class TimerActivity extends AppCompatActivity {
         return 1;
     }
 
-    public void timersActivity(View view, final EditText th, final EditText tm, final EditText ts){
+    public void timersActivity(View view, final EditText th, final EditText tm, final EditText ts, ToggleButton tb){
         Intent intent = new Intent(this, TimersActivity.class);
         Bundle bundle = new Bundle();
         Bundle cBundle = getIntent().getExtras();
         int size = cBundle.getInt("size");
         size++;
         bundle.putInt("size", size);
+        bundle.putBoolean("pomodoro",tb.isChecked());
+
         String hours = th.getText().toString();
         if(hours.length() == 1) {
             hours = "0" + hours;
-        }
+            }
         String minutes = tm.getText().toString();
         if(minutes.length() == 1) {
             minutes = "0" + minutes;
-        }
+            }
         String seconds =  ts.getText().toString();
         if(seconds.length() == 1) {
             seconds = "0" + seconds;
         }
         String timer = hours + ":" + minutes + ":" + seconds;
+
         bundle.putString("timer", timer);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
-    public void timersActivity2(View view, final EditText th, final EditText tm, final EditText ts){
+    public void timersActivity2(View view, final EditText th, final EditText tm, final EditText ts, ToggleButton tb){
+        Intent intent = new Intent(this, TimersActivity.class);
+        Bundle bundle = new Bundle();
+        Bundle cBundle = getIntent().getExtras();
+        int size = cBundle.getInt("size");
+        size++;
+        bundle.putInt("size", size);
+        bundle.putBoolean("pomodoro",tb.isChecked());
 
+        String[] pomos = new String[pomoTimes.size()];
+        for(int i = 0; i < pomoTimes.size(); i++){
+            pomos[i] = pomoTimes.get(i);
+        }
+
+        bundle.putStringArray("chain", pomos);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
