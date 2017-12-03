@@ -16,7 +16,8 @@
         android:layout_marginTop="9dp"
         android:entries="@array/spinner_ampm"
         app:layout_constraintStart_toEndOf="@+id/spinnerMinute"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+        app:layout_constraintTop_toBottomOf="@+id/alarmNameCreate"
+        android:layout_marginLeft="28dp" />
 
     <Spinner
         android:id="@+id/spinnerHour"
@@ -26,7 +27,8 @@
         android:layout_marginTop="9dp"
         android:entries="@array/spinner_hours"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+        app:layout_constraintTop_toBottomOf="@+id/alarmNameCreate"
+        android:layout_marginLeft="16dp" />
 
     <Spinner
         android:id="@+id/spinnerMinute"
@@ -36,7 +38,8 @@
         android:layout_marginTop="9dp"
         android:entries="@array/spinner_minutes"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+        app:layout_constraintTop_toBottomOf="@+id/alarmNameCreate"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/buttonCreate"
@@ -45,7 +48,8 @@
         android:layout_marginEnd="38dp"
         android:text="ADD"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="38dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -56,10 +60,11 @@
         android:text=":"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintStart_toEndOf="@+id/spinnerHour"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAlarmName" />
+        app:layout_constraintTop_toBottomOf="@+id/alarmNameCreate"
+        android:layout_marginLeft="13dp" />
 
     <EditText
-        android:id="@+id/editTextAlarmName"
+        android:id="@+id/alarmNameCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -68,5 +73,6 @@
         android:inputType="textPersonName"
         android:text="AlarmName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp" />
 </android.support.constraint.ConstraintLayout>

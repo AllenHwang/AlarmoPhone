@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -42,11 +43,18 @@ public class AlarmArrayAdapter extends ArrayAdapter<AlarmData> {
             @Override
             public void onClick(View v) {
                 remove(alarmData);
-                notifyDataSetChanged();
             }
         });
 
         Switch toggleAlarm = (Switch) convertView.findViewById(R.id.AlarmDataToggle);
+        toggleAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                }
+            }
+        });
         // Return the completed view to render on screen
         return convertView;
     }

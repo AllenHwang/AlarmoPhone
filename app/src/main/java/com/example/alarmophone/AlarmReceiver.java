@@ -31,7 +31,7 @@ import static com.example.alarmophone.NotificationPublisher.NOTIFICATION_ID;
 public class AlarmReceiver extends BroadcastReceiver {
 
 
-    private String CHANNEL_ID = "Alarm_Channel";
+
 
     @TargetApi(Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,19 +67,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public void SetAlarm(Context context, Long time){
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentTitle("Scheduled Notification")
-                .setContentText("Alarm!")
-                .setSmallIcon(R.drawable.ic_launcher_background);
-        Notification notification = builder.build();
-        intent.putExtra(NOTIFICATION_ID, 1);
-        intent.putExtra(NOTIFICATION, notification);
-
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        am.set(AlarmManager.RTC_WAKEUP, time, pi);
     }
 
     public void CancelAlarm(Context context){

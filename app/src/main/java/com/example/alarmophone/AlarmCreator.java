@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,10 +22,10 @@ public class AlarmCreator extends Activity {
 
 
     public static Ringtone ringtone;
-    private static AlarmCreator inst;
 
-
-
+    private Spinner hour, minute, amPm;
+    private EditText alarmName;
+    private Button createAlarm;
 
     @Override
     public void onStart() {
@@ -33,20 +36,36 @@ public class AlarmCreator extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_create);
-
-        alarmTextView =  findViewById(R.id.alarmText);
-        ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
-        alarmReceiver = new AlarmReceiver();
-
-
-
+        hour = (Spinner) findViewById(R.id.spinnerHour);
+        hour.setSelection(0);
+        minute = (Spinner) findViewById(R.id.spinnerMinute);
+        minute.setSelection(0);
+        amPm = (Spinner) findViewById(R.id.spinnerAMPM);
+        amPm.setSelection(0);
+        alarmName = (EditText) findViewById(R.id.alarmNameCreate);
+        createAlarm = (Button) findViewById(R.id.buttonCreate);
+        createAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlarmOverview.arrayAdapter.add(new AlarmData(getHour(), getMinute(), getAMPM(), getName()));
+                AlarmOverview.arrayAdapter.notifyDataSetChanged();
+                finish();
+            }
+        });
     }
 
-    public void onToggleClicked(View view) {
-
+    private String getHour(){
+        return (String) hour.getSelectedItem();
+    }
+    private String getMinute(){
+        return (String) minute.getSelectedItem();
+    }
+    private String getAMPM(){
+        return (String) amPm.getSelectedItem();
+    }
+    private String getName(){
+        return (String) alarmName.getText().toString();
     }
 
-    public void setAlarmText(String alarmText) {
-        alarmTextView.setText(alarmText);
-    }
+
 }
