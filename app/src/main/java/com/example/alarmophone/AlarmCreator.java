@@ -23,7 +23,7 @@ public class AlarmCreator extends Activity {
 
     public static Ringtone ringtone;
 
-    private Spinner hour, minute, amPm;
+    private Spinner hour, minute, amPm, amount, intervalMinute;
     private EditText alarmName;
     private Button createAlarm;
 
@@ -42,13 +42,18 @@ public class AlarmCreator extends Activity {
         minute.setSelection(0);
         amPm = (Spinner) findViewById(R.id.spinnerAMPM);
         amPm.setSelection(0);
+        amount = (Spinner) findViewById(R.id.spinnerCascadeAmount);
+        amount.setSelection(0);
+        intervalMinute = (Spinner) findViewById(R.id.spinnerIntervalMinute);
+        intervalMinute.setSelection(0);
+
+
         alarmName = (EditText) findViewById(R.id.alarmNameCreate);
         createAlarm = (Button) findViewById(R.id.buttonCreate);
         createAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlarmOverview.arrayAdapter.add(new AlarmData(getHour(), getMinute(), getAMPM(), getName()));
-                AlarmOverview.arrayAdapter.notifyDataSetChanged();
+                AlarmOverview.arrayAdapter.add(new AlarmData(getHour(), getMinute(), getAMPM(), getName(), getAmount(), getIntervalMinute()));
                 finish();
             }
         });
@@ -66,6 +71,14 @@ public class AlarmCreator extends Activity {
     private String getName(){
         return (String) alarmName.getText().toString();
     }
+    private int getAmount(){
+        return Integer.parseInt((String) amount.getSelectedItem());
+    }
+    private int getIntervalMinute(){
+        return Integer.parseInt((String) intervalMinute.getSelectedItem());
+    }
+
+
 
 
 }

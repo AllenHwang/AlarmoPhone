@@ -3,46 +3,85 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/AlarmDataName"
-        android:layout_width="200dp"
+        android:id="@+id/AlarmDataIntervalAmount"
+        android:layout_width="100dp"
         android:layout_height="35dp"
-        android:layout_alignBaseline="@+id/AlarmDataTime"
-        android:layout_alignBottom="@+id/AlarmDataTime"
+        android:layout_alignBaseline="@+id/TextView10"
+        android:layout_alignBottom="@+id/TextView10"
         android:layout_marginLeft="21dp"
         android:layout_marginStart="21dp"
-        android:layout_toEndOf="@+id/AlarmDataTime"
-        android:layout_toRightOf="@+id/AlarmDataTime"
+        android:layout_toEndOf="@+id/TextView10"
+        android:layout_toRightOf="@+id/TextView10"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/AlarmDataTime"
+        android:id="@+id/TextView10"
         android:layout_width="100dp"
         android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="31dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="19dp"
-        android:text="TextView" />
+        android:layout_below="@+id/textView9"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:text="Minute Inteval:" />
 
     <Button
         android:id="@+id/AlarmDataDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/AlarmDataTime"
-        android:layout_alignStart="@+id/AlarmDataTime"
-        android:layout_below="@+id/AlarmDataTime"
-        android:layout_marginTop="33dp"
+        android:layout_alignBaseline="@+id/AlarmDataToggle"
+        android:layout_alignBottom="@+id/AlarmDataToggle"
+        android:layout_alignLeft="@+id/TextView10"
+        android:layout_alignStart="@+id/TextView10"
         android:text="Delete" />
 
     <Switch
         android:id="@+id/AlarmDataToggle"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_alignLeft="@+id/AlarmDataName"
-        android:layout_alignStart="@+id/AlarmDataName"
-        android:layout_alignTop="@+id/AlarmDataDelete"
+        android:layout_below="@+id/AlarmDataIntervalAmount"
+        android:layout_marginTop="27dp"
+        android:layout_toEndOf="@+id/TextView10"
+        android:layout_toRightOf="@+id/TextView10"
         android:text="On/Off" />
+
+    <TextView
+        android:id="@+id/AlarmDataAmount"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/textView9"
+        android:layout_alignBottom="@+id/textView9"
+        android:layout_alignLeft="@+id/AlarmDataIntervalAmount"
+        android:layout_alignStart="@+id/AlarmDataIntervalAmount"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/TextView10"
+        android:layout_alignStart="@+id/TextView10"
+        android:layout_below="@+id/AlarmDataTime"
+        android:text="Amount:" />
+
+    <TextView
+        android:id="@+id/AlarmDataTime"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/textView9"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView9"
+        android:layout_marginTop="21dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/AlarmDataName"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/AlarmDataTime"
+        android:layout_alignBottom="@+id/AlarmDataTime"
+        android:layout_alignLeft="@+id/AlarmDataAmount"
+        android:layout_alignStart="@+id/AlarmDataAmount"
+        android:text="TextView" />
 
 </RelativeLayout>

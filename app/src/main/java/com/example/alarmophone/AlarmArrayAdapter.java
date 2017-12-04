@@ -10,6 +10,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -35,16 +37,21 @@ public class AlarmArrayAdapter extends ArrayAdapter<AlarmData> {
         // Lookup view for data population
         TextView alarmName = (TextView) convertView.findViewById(R.id.AlarmDataName);
         TextView alarmTime = (TextView) convertView.findViewById(R.id.AlarmDataTime);
+        TextView alarmMinuteInterval = (TextView) convertView.findViewById(R.id.AlarmDataIntervalAmount);
+        TextView alarmAmount = (TextView) convertView.findViewById(R.id.AlarmDataAmount);
 
         // Populate the data into the template view using the data object
         alarmName.setText(alarmData.name);
         alarmTime.setText(alarmData.hour + ":" + alarmData.minute + " " + alarmData.amPm +".");
+        alarmMinuteInterval.setText(((Integer) alarmData.intervalMinute).toString());
+        alarmAmount.setText(((Integer) alarmData.cascadeAmount).toString());
 
         final Button deleteAlarm = (Button) convertView.findViewById(R.id.AlarmDataDelete);
         deleteAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 remove(alarmData);
+                alarmOverview.clearAlarm(alarmData);
                 //Maybe have to call clearAlarm because would deleting a ringing alarm cancel it???
             }
         });

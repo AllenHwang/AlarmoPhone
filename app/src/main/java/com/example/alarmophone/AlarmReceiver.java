@@ -40,6 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Wake up");
         wl.acquire();
 
+
         StringBuilder msgStr = new StringBuilder();
         Format formatter = new SimpleDateFormat("hh:mm:ss a");
         msgStr.append(formatter.format(new Date()));
@@ -57,7 +58,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         notificationManager.notify(id, notification);
 
         int alarmId = intent.getIntExtra("ALARM_ID", 0);
-        AlarmOverview.ringtoneMap.get(alarmId).play();
+        int alarmCount = intent.getIntExtra("ALARM_COUNT", 0);
+        AlarmOverview.ringtoneMap.get(alarmId).get(alarmCount).play();
     }
 
 
