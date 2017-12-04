@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -117,6 +118,9 @@ public class TimerActivity extends AppCompatActivity {
             seconds.setText(String.format("%02d", s));
             start.setEnabled(true);
             add.setEnabled(false);
+
+            if(cdt != null)
+                cdt.cancel();
         }
 
         String iChain = bundle.getString("chain");
@@ -141,6 +145,9 @@ public class TimerActivity extends AppCompatActivity {
 
             start.setEnabled(true);
             add.setEnabled(false);
+
+            if(cdt != null)
+                cdt.cancel();
         }
 
 
@@ -356,7 +363,8 @@ public class TimerActivity extends AppCompatActivity {
                     }
                     timersActivity2(view, hours, minutes, seconds, pomodoro);
                 }
-
+                if(cdt != null)
+                    cdt.cancel();
             }
         });
 
@@ -377,7 +385,8 @@ public class TimerActivity extends AppCompatActivity {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cdt.cancel();
+                if(cdt != null)
+                    cdt.cancel();
                 start.setEnabled(true);
                 stop.setEnabled(false);
                 add.setEnabled(true);
@@ -444,8 +453,8 @@ public class TimerActivity extends AppCompatActivity {
                         seconds.setText("00");
                     }
 
-                    if(cdt != null)
-                        cdt.cancel();
+                    //if(cdt != null)
+                   //     cdt.cancel();
                     start.setEnabled(true);
                     stop.setEnabled(false);
                 }
@@ -621,6 +630,10 @@ public class TimerActivity extends AppCompatActivity {
         String timer = hours + ":" + minutes + ":" + seconds;
 
         bundle.putString("timer", timer);
+
+        if(cdt != null)
+            cdt.cancel();
+
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -640,7 +653,30 @@ public class TimerActivity extends AppCompatActivity {
         }
 
         bundle.putStringArray("chain", pomos);
+
+        if(cdt != null)
+            cdt.cancel();
+
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(cdt != null)
+            cdt.cancel();
+        Intent intent = new Intent(this, TimersActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        if(cdt != null)
+            cdt.cancel();
+        Intent intent = new Intent(this, TimersActivity.class);
+        startActivity(intent);
+        finish();
+        return true;
     }
 }
