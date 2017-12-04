@@ -43,6 +43,9 @@
             android:parentActivityName=".MainMenuActivity" />
         <activity android:name=".LoginActivity"
             android:parentActivityName=".MainMenuActivity"></activity>
+        <activity
+            android:name=".TimersActivity"
+            android:parentActivityName=".MainMenuActivity" />
     </application>
 
 </manifest>
