@@ -40,7 +40,7 @@
 
         <activity
             android:name=".TimerActivity"
-            android:parentActivityName=".MainMenuActivity" />
+            android:parentActivityName=".TimersActivity" />
         <activity android:name=".LoginActivity"
             android:parentActivityName=".MainMenuActivity"></activity>
         <activity
