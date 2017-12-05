@@ -663,20 +663,27 @@ public class TimerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(cdt != null)
+        if(cdt != null) {
             cdt.cancel();
-        Intent intent = new Intent(this, TimersActivity.class);
-        startActivity(intent);
-        finish();
+            Intent intent = new Intent(this, TimersActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
-        if(cdt != null)
+    public boolean onSupportNavigateUp() {
+        if (cdt != null) {
             cdt.cancel();
-        Intent intent = new Intent(this, TimersActivity.class);
-        startActivity(intent);
-        finish();
+            Intent intent = new Intent(this, TimersActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            super.onSupportNavigateUp();
+        }
         return true;
     }
 }
